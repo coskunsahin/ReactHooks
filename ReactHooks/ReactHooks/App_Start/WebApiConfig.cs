@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Cors;
-
+using Newtonsoft.Json.Serialization;
 namespace ReactHooks
 {
     public static class WebApiConfig
@@ -20,7 +20,12 @@ namespace ReactHooks
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
+
+  
             );
+            config.Formatters.XmlFormatter.SupportedMediaTypes.Clear();
+            config.Formatters.Remove(config.Formatters.XmlFormatter);
+            config.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Serialize;
         }
     }
 }
