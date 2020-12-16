@@ -3,31 +3,54 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Http.Cors;
+using System.Web.Http.Description;
 using ReactHooks.Models;
+
 
 namespace ReactHooks.Controllers
 {
     [RoutePrefix("Api/Hooks")]
+    [EnableCors(origins: "http://localhost:3000", headers: "*", methods: "*")]
     public class HooksController : ApiController
+
+
     {
-        dbcoreEntities DB = new dbcoreEntities();
+       NorthwindEntities DB = new NorthwindEntities();
+
+
+
+
+
+
+
+
+
+
+
         [HttpPost]
-        public object CreateEmp(Emp e)
+       
+        public object CreateEmp([FromBody] EmployeerEntity e)
+
         {
             try
             {
-                if (e.Id == 0)
+                if (e.id == 0)
                 {
                     Employee em = new Employee();
-                    em.Name = e.Name;
-                    em.Department = e.Department;
-                    em.Age = e.Age;
-                    em.City = e.City;
-                    em.Country = e.Country;
-                    em.Gender = e.Gender;
+                    em.FirstName = e.firstName;
+                    em.LastName = e.lastName;
+                    em.Title = e.title;
+                    em.ReportsTo = e.reportNumber;
+                    em.City = e.city;
+                    em.Country = e.country;
+                    em.BirthDate = e.birthDate;
+                    em.HireDate = e.hireDate;
+                    em.TitleOfCourtesy = e.titleOfCourtesy;
                     DB.Employees.Add(em);
-                    DB.SaveChanges();
+                   DB.SaveChanges();
                     return new Response
                     {
                         Status = "Success",
@@ -36,17 +59,21 @@ namespace ReactHooks.Controllers
                 }
                 else
                 {
-                    var obj = DB.Employees.Where(x => x.Id == e.Id).ToList().FirstOrDefault();
-                    if (obj.Id > 0)
+                    var obj = DB.Employees.Where(x => x.EmployeeID == e.id).ToList().FirstOrDefault();
+                    if (obj.EmployeeID > 0)
                     {
+                        obj.FirstName = e.firstName;
+                        obj.LastName = e.lastName;
+                        obj.Title = e.title;
+                        obj.ReportsTo = e.reportNumber;
+                        obj.BirthDate = e.birthDate;
+                        obj.HireDate = e.hireDate;
+                        obj.City = e.city;
+                        obj.Country = e.country;
+                        obj.TitleOfCourtesy = e.titleOfCourtesy;
 
-                        obj.Name = e.Name;
-                        obj.Department = e.Department;
-                        obj.Age = e.Age;
-                        obj.City = e.City;
-                        obj.Country = e.Country;
-                        obj.Gender = e.Gender;
-                        DB.SaveChanges();
+
+                       // DB.SaveChanges();
                         return new Response
                         {
                             Status = "Updated",
@@ -67,34 +94,66 @@ namespace ReactHooks.Controllers
 
 
         }
+
+        [HttpPost]
+        [Route("CreateEmps")]
+        public IHttpActionResult CreateEmps([FromBody] EmployeerEntity e)
+        {
+            var obj = DB.Employees.Where(x => x.EmployeeID == e.id).ToList().FirstOrDefault();
+            if (obj.EmployeeID > 0)
+            {
+                obj.FirstName = e.firstName;
+                obj.LastName = e.lastName;
+                obj.Title = e.title;
+                obj.BirthDate = e.birthDate;
+                obj.HireDate = e.hireDate;
+                obj.ReportsTo = e.reportNumber;
+                obj.City = e.city;
+                obj.Country = e.country;
+                obj.TitleOfCourtesy = e.titleOfCourtesy;
+
+
+                DB.SaveChanges();
+                
+            }
+            return Ok(e);
+        }
         [HttpGet]
         [Route("employee")]
-        public object Getrecord()
+
+
+
+        
+      public object Getrecord()
 
         {
-            var emp = DB.Employees.ToList();
+            var emp = DB.Employees.Select(k=>new EmployeerEntity { id = k.EmployeeID,firstName=k.FirstName, lastName = k.LastName, reportNumber = k.ReportsTo, title = k.Title,birthDate=k.BirthDate,hireDate=k.HireDate, country = k.Country,city=k.City, titleOfCourtesy =k.TitleOfCourtesy}).ToList();
             return emp;
         }
 
 
-        [HttpDelete]
-        public object Deleteemployee(int id)
+    [HttpDelete]
+    public object Deleteemployee(int id)
+    {
+         var obj = DB.Employees.Where(x => x.EmployeeID == id).ToList().FirstOrDefault();
+         DB.Employees.Remove(obj);
+        DB.SaveChanges();
+        return new Response
         {
-            var obj = DB.Employees.Where(x => x.Id == id).ToList().FirstOrDefault();
-            DB.Employees.Remove(obj);
-            DB.SaveChanges();
-            return new Response
-            {
-                Status = "Delete",
-                Message = "Delete Successfuly"
-            };
-        }
-        [Route("employeedetails")]
-        [HttpGet]
-        public object employeedetailById(int id)
+            Status = "Delete",
+            Message = "Delete Successfuly"
+        };
+    }
+    [Route("employeedetails")]
+    [HttpGet]
+        public object employeedetailByid(int id)
         {
-            var obj = DB.Employees.Where(x => x.Id == id).ToList().FirstOrDefault();
-            return obj;
+            var obj = DB.Employees.Where(x => x.EmployeeID== id).Select(k => new EmployeerEntity{ id = k.EmployeeID,firstName=k.FirstName, lastName = k.LastName,reportNumber = k.ReportsTo,title = k.Title, birthDate = k.BirthDate, hireDate = k.HireDate, country = k.Country, city = k.City, titleOfCourtesy = k.TitleOfCourtesy }).ToList().FirstOrDefault();
+           return obj;
         }
     }
-}  
+
+   
+    } 
+
+ 

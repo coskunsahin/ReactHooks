@@ -13,10 +13,10 @@ namespace ReactHooks.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class dbcoreEntities : DbContext
+    public partial class NorthwindEntities : DbContext
     {
-        public dbcoreEntities()
-            : base("name=dbcoreEntities")
+        public NorthwindEntities()
+            : base("name=NorthwindEntities")
         {
         }
     

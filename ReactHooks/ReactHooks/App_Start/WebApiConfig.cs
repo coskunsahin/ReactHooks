@@ -11,21 +11,21 @@ namespace ReactHooks
         public static void Register(HttpConfiguration config)
         {
             // Web API configuration and services
-            EnableCorsAttribute cors = new EnableCorsAttribute("*", "*", "*");
+
+            EnableCorsAttribute cors = new EnableCorsAttribute("*", "*", "*","*");
+          
             config.EnableCors(cors);
             // Web API routes
             config.MapHttpAttributeRoutes();
 
-            config.Routes.MapHttpRoute(
-                name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional }
 
+            config.Routes.MapHttpRoute(
+                          name: "DefaultApi",
+                          routeTemplate: "api/{controller}/{id}",
+                          defaults: new { id = RouteParameter.Optional });
+                  
   
-            );
-            config.Formatters.XmlFormatter.SupportedMediaTypes.Clear();
-            config.Formatters.Remove(config.Formatters.XmlFormatter);
-            config.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Serialize;
+          
         }
     }
 }

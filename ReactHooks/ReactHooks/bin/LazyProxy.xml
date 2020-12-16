@@ -1,0 +1,102 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>LazyProxy</name>
+    </assembly>
+    <members>
+        <member name="T:LazyProxy.LazyProxyBase">
+            <summary>
+            Base class for lazy proxies.
+            </summary>
+        </member>
+        <member name="M:LazyProxy.LazyProxyBase.Initialize(System.Func{System.Object})">
+            <summary>
+            Initializes inner <see cref="T:System.Lazy`1"/> instance with the valueFactory provided.
+            </summary>
+            <param name="valueFactory">Function that returns a value.</param>
+        </member>
+        <member name="T:LazyProxy.LazyProxyBuilder">
+            <summary>
+            Is used to create at runtime a lazy proxy type or an instance of this type.
+            </summary>
+        </member>
+        <member name="M:LazyProxy.LazyProxyBuilder.GetType``1">
+            <summary>
+            Defines at runtime a class that implements interface T
+            and proxies all invocations to <see cref="T:System.Lazy`1"/> of this interface.
+            </summary>
+            <typeparam name="T">The interface proxy type implements.</typeparam>
+            <returns>The lazy proxy type.</returns>
+        </member>
+        <member name="M:LazyProxy.LazyProxyBuilder.GetType(System.Type)">
+            <summary>
+            Defines at runtime a class that implements interface of Type
+            and proxies all invocations to <see cref="T:System.Lazy`1"/> of this interface.
+            </summary>
+            <param name="type">The interface proxy type implements.</param>
+            <returns>The lazy proxy type.</returns>
+        </member>
+        <member name="M:LazyProxy.LazyProxyBuilder.CreateInstance``1(System.Func{``0})">
+            <summary>
+            Creates a lazy proxy type instance using a value factory.
+            </summary>
+            <param name="valueFactory">The function real value returns.</param>
+            <typeparam name="T">The interface proxy type implements.</typeparam>
+            <returns>The lazy proxy type instance.</returns>
+        </member>
+        <member name="M:LazyProxy.LazyProxyBuilder.CreateInstance(System.Type,System.Func{System.Object})">
+            <summary>
+            Creates a lazy proxy type instance using a value factory.
+            </summary>
+            <param name="type">The interface proxy type implements.</param>
+            <param name="valueFactory">The function real value returns.</param>
+            <returns>The lazy proxy type instance.</returns>
+        </member>
+        <member name="M:LazyProxy.LazyProxyBuilder.DefineProxyType(System.Type)">
+             <summary>
+             Generate the lazy proxy type at runtime.
+            
+             Here is an example of the generated code for T == IMyService:
+             <![CDATA[
+            
+             public interface IMyService { void Foo(); }
+            
+             public class LazyProxyImpl_1eb94ccd79fd48af8adfbc97c76c10ff_IMyService : IMyService
+             {
+                 private Lazy<IMyService> _service;
+            
+                 public void Initialize(Func<object> valueFactory)
+                 {
+                     _service = LazyBuilder.CreateInstance<IMyService>(valueFactory);
+                 }
+            
+                 public void Foo() => _service.Value.Foo();
+             }
+            
+             ]]>
+             </summary>
+             <param name="type">The interface proxy type implements.</param>
+             <returns>The lazy proxy type.</returns>
+        </member>
+        <member name="T:LazyProxy.LazyProxyImplementation">
+            <summary>
+            This type hosts methods being used by lazy proxy implementations.
+            </summary>
+        </member>
+        <member name="M:LazyProxy.LazyProxyImplementation.CreateInstance``1(System.Func{System.Object})">
+            <summary>
+            Creates an instance of <see cref="T:System.Lazy`1"/>.
+            </summary>
+            <param name="valueFactory">Function that returns a value.</param>
+            <typeparam name="T">Type of lazy value.</typeparam>
+            <returns>Instance of <see cref="T:System.Lazy`1"/></returns>
+        </member>
+        <member name="M:LazyProxy.LazyProxyImplementation.DisposeInstance``1(System.Lazy{``0})">
+            <summary>
+            Disposes an instance owned by <see cref="T:System.Lazy`1"/> if any.
+            </summary>
+            <param name="instanceOwner"><see cref="T:System.Lazy`1"/> object.</param>
+            <typeparam name="T">Type of lazy value. It must implement <see cref="T:System.IDisposable"/> interface.</typeparam>
+        </member>
+    </members>
+</doc>

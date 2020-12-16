@@ -4,8 +4,9 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="814931a0a1474278822bec9796222f57" Name="Diagram1">
-        <EntityTypeShape EntityType="dbcoreModel.Employee" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+      <Diagram DiagramId="0a1be02263264a9ea7c511f812882b7d" Name="Diagram1">
+        <EntityTypeShape EntityType="NorthwindModel.Employee" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <AssociationConnector Association="NorthwindModel.FK_Employees_Employees" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
