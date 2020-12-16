@@ -149,7 +149,7 @@ namespace ReactHooks.Controllers
         public object employeedetailByid(int id)
         {
             var obj = DB.Employees.Where(x => x.EmployeeID== id).Select(k => new EmployeerEntity{ id = k.EmployeeID,firstName=k.FirstName, lastName = k.LastName,reportNumber = k.ReportsTo,title = k.Title, birthDate = k.BirthDate, hireDate = k.HireDate, country = k.Country, city = k.City, titleOfCourtesy = k.TitleOfCourtesy }).ToList().FirstOrDefault();
-           return obj;
+            return obj;
         }
     }
 
